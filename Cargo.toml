@@ -1,0 +1,12 @@
+[workspace]
+resolver = "2"
+members = [
+    "components/observer-app-rofl",
+    "components/observer-app-mock",
+    "components/observer-common",
+    "components/observer-config"
+]
+
+[workspace.dependencies]
+oasis-runtime-sdk = { git = "https://github.com/oasisprotocol/oasis-sdk", tag = "runtime-sdk/v0.9.6" }
+sgxs-tools = "0.8"

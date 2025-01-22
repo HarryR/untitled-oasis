@@ -1,0 +1,5 @@
+[build]
+rustflags = ["-Ctarget-feature=+aes,+ssse3"]
+
+[env]
+SGXS_TOOLS_PATH = { value = "${CARGO_HOME}/bin", relative = true }

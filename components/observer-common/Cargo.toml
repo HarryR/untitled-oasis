@@ -1,0 +1,20 @@
+[package]
+name = "observer-common"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+observer-config = { path = "../observer-config" }
+
+# Oasis
+rofl-utils = { git = "https://github.com/oasisprotocol/oasis-sdk", tag = "rofl-utils/v0.1.1" }
+
+# third-party
+anyhow = "1.0"
+serde_json = "1.0"
+
+[features]
+observer-mock = ["observer-config/observer-mock"]
+observer-localnet = ["observer-config/observer-localnet"]
+observer-testnet = ["observer-config/observer-testnet"]
+observer-mainnet = ["observer-config/observer-mainnet"]

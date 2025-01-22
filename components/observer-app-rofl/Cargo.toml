@@ -1,0 +1,35 @@
+[package]
+name = "observer-app-rofl"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "observer_app_rofl"
+path = "src/lib.rs"
+
+[[bin]]
+name = "observer-app-rofl-localnet"
+path = "src/main-localnet.rs"
+required-features = ["observer-localnet", "debug-mock-sgx"]
+
+[[bin]]
+name = "observer-app-rofl-testnet"
+path = "src/main-testnet.rs"
+required-features = ["observer-testnet"]
+
+[[bin]]
+name = "observer-app-rofl-mainnet"
+path = "src/main-mainnet.rs"
+required-features = ["observer-mainnet"]
+
+[dependencies]
+oasis-runtime-sdk = { workspace = true }
+observer-common = { path = "../observer-common" }
+observer-config = { path = "../observer-config" }
+
+[features]
+# Enables mock SGX in non-SGX builds.
+debug-mock-sgx = ["oasis-runtime-sdk/debug-mock-sgx"]
+observer-localnet = ["observer-common/observer-localnet"]
+observer-testnet = ["observer-common/observer-testnet"]
+observer-mainnet = ["observer-common/observer-mainnet"]

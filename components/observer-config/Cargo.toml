@@ -1,0 +1,13 @@
+[package]
+name = "observer-config"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+oasis-runtime-sdk = { workspace = true }
+
+[features]
+observer-mock = []
+observer-localnet = []
+observer-testnet = []
+observer-mainnet = []

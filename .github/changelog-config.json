@@ -1,0 +1,30 @@
+{
+    "categories": [
+        {
+            "title": "💥 Breaking Changes",
+            "labels": ["breaking"]
+        },
+        {
+            "title": "✨ Features",
+            "labels": ["enhancement", "feature"]
+        },
+        {
+            "title": "🐛 Bug Fixes",
+            "labels": ["bug", "fix"]
+        },
+        {
+            "title": "📚 Documentation",
+            "labels": ["documentation", "docs"]
+        },
+        {
+            "title": "🔧 Maintenance",
+            "labels": ["maintenance", "refactor", "chore"]
+        }
+    ],
+    "exclude_labels": ["duplicate", "wontfix", "question"],
+    "include_contributors": true,
+    "template": {
+        "release": "# Release Notes\n\n{{CHANGES}}\n\n## Contributors\n\n{{CONTRIBUTORS}}",
+        "change": "- {{TITLE}} (#{{NUMBER}}) by @{{AUTHOR}}"
+    }
+}

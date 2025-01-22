@@ -1,0 +1,13 @@
+cache
+artifacts
+node_modules
+pnpm-lock.yaml
+Cargo.lock
+typechain-generated
+typechain-ethers-v6
+oasis_cli_*
+*.orc
+target
+mainnet.pem
+testnet.pem
+rofls
