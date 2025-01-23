@@ -11,6 +11,15 @@ interface IHasUpgradeAndCall {
     function upgradeToAndCall(address newImplementation, bytes calldata data) external payable;
 }
 
+interface IHasERC1967Implementation {
+
+    function ERC1967_implementation() external view returns (address);
+}
+
+// Note: `Warning: This contract has a payable fallback function, but no receive ether function. Consider adding a receive ether function.`
+// This isn't a problem, the payable fallback is by design and works
+// But there's no way of easily silencing the warning.
+
 /// @dev storage slot 0 is special as it's used by Ownable for the owner address
 contract AtomicProxy is Ownable, Proxy {
 

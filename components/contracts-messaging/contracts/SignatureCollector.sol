@@ -6,10 +6,12 @@ import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 import { SlotDerivation } from '@openzeppelin/contracts/utils/SlotDerivation.sol';
 
 import { Signature } from './lib/SignedMessage.sol';
-import { IAllowedSigner } from './lib/IAllowedSigner.sol';
-import { MessageOrigin, MessageOriginLibrary } from './lib/MessageOrigin.sol';
+import { IAllowedSigner } from './IAllowedSigner.sol';
+import { PackedOrigin, MessageOrigin, MessageOriginLibrary } from './lib/MessageOrigin.sol';
 
 contract SignatureCollector {
+
+    using MessageOriginLibrary for PackedOrigin;
 
     struct State {
         mapping(bytes32 => Signature[]) sigs;
@@ -28,8 +30,7 @@ contract SignatureCollector {
     }
 
     function collect_signature(
-        address emitterContract,
-        uint256 packedOrigin,
+        PackedOrigin memory packedOrigin,
         bytes32 messageHash,
         Signature calldata sig
     )
@@ -39,13 +40,13 @@ contract SignatureCollector {
 
         ECDSA.RecoverError err;
 
-        bytes32 messageId = MessageOriginLibrary.hash(emitterContract, packedOrigin, messageHash);
+        bytes32 messageId = packedOrigin.hash(messageHash);
 
         ( recovered, err, ) = ECDSA.tryRecover(messageId, sig.r, sig.sv);
 
         require( err == ECDSA.RecoverError.NoError );
 
-        MessageOrigin memory origin = MessageOriginLibrary.unpack(packedOrigin);
+        MessageOrigin memory origin = packedOrigin.unpack();
 
         // If a reciprocal contract exists for the sender, ask it if allowed
         // This allows for optional protocol-specific gating.
@@ -61,6 +62,15 @@ contract SignatureCollector {
         State storage state = _getState();
 
         state.sigs[messageId].push(Signature(sig.r, sig.sv));
+    }
+
+    function signers_count(bytes32 messageId)
+        external view
+        returns (uint)
+    {
+        State storage state = _getState();
+
+        return state.sigs[messageId].length;
     }
 
     function signers_fetch(bytes32 messageId)

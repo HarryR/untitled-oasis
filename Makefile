@@ -40,6 +40,13 @@ oasis: bin/$(OASIS_CLI_DIR)
 
 ################################################################################
 
+solidity:
+	make -C components/contracts-proxy
+	make -C components/contracts-messaging
+	make -C components/contracts-bridge-example
+
+################################################################################
+
 clean-cargo:
 	cargo clean
 	rm -rf target

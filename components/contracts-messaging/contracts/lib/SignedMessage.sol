@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 
-import { MessageOriginLibrary } from './MessageOrigin.sol';
+import { PackedOrigin, MessageOriginLibrary } from './MessageOrigin.sol';
 
 struct Signature {
     bytes32 r;
@@ -13,21 +13,19 @@ struct Signature {
 
 struct SignedMessage {
     Signature[] sigs;
-    address emitterContract;
-    uint256 packedOrigin;
+    PackedOrigin packedOrigin;
     bytes message;
 }
 
+using MessageOriginLibrary for PackedOrigin;
+
 function decodeSignedMessage(SignedMessage memory x)
     pure
-    returns (
-        bytes32 messageId,
-        address[] memory addresses
-    )
+    returns (bytes32 messageId, address[] memory addresses)
 {
     uint nSigs = x.sigs.length;
 
-    messageId = MessageOriginLibrary.hash(x.emitterContract, x.packedOrigin, x.message);
+    messageId = x.packedOrigin.hash(x.message);
 
     addresses = new address[](nSigs);
 

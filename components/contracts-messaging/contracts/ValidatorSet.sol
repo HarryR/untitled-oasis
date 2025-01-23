@@ -6,11 +6,10 @@ import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { SlotDerivation } from '@openzeppelin/contracts/utils/SlotDerivation.sol';
 import { EnumerableSet } from '@openzeppelin/contracts/utils/structs/EnumerableSet.sol';
 
-import { IAllowedSigner } from './lib/IAllowedSigner.sol';
 import { decodeSignedMessage, SignedMessage } from './lib/SignedMessage.sol';
 import { MessageOrigin, MessageOriginLibrary } from './lib/MessageOrigin.sol';
 
-contract ValidatorSet is Ownable, IAllowedSigner {
+contract ValidatorSet is Ownable {
 
     using EnumerableSet for EnumerableSet.AddressSet;
 
@@ -53,15 +52,11 @@ contract ValidatorSet is Ownable, IAllowedSigner {
 
     error DuplicateSignerError(address recovered);
 
-    function internal_decode(SignedMessage memory x)
-        internal view
-        returns (
-            MessageOrigin memory origin,
-            bytes32 messageId,
-            State storage state
-        )
+    function decode(SignedMessage memory x)
+        external view
+        returns (bytes32 messageId, MessageOrigin memory origin)
     {
-        state = _getState();
+        State storage state = _getState();
 
         address[] memory signers;
 
@@ -77,24 +72,6 @@ contract ValidatorSet is Ownable, IAllowedSigner {
         }
 
         origin = MessageOriginLibrary.unpack(x.packedOrigin);
-    }
-
-    function decode(SignedMessage memory x)
-        external view
-        returns (bytes32 messageId, MessageOrigin memory origin)
-    {
-        (origin, messageId,) = internal_decode(x);
-    }
-
-    function receiveOnce(SignedMessage memory x)
-        external
-        returns (bytes32 messageId, MessageOrigin memory origin)
-    {
-        State storage state;
-
-        (origin, messageId, state) = internal_decode(x);
-
-        state.received[messageId] = true;
     }
 
     function add(address value)
@@ -124,7 +101,7 @@ contract ValidatorSet is Ownable, IAllowedSigner {
         return state.signers.values();
     }
 
-    function isSignerAllowed(address value)
+    function contains(address value)
         external view
         returns (bool)
     {

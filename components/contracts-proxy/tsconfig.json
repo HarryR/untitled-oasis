@@ -1,5 +1,5 @@
 {
-    "include": ["src", "tasks", "scripts", "test", "constants"],
+    "include": ["src", "tasks", "scripts", "test", "typechain-ethers-v6"],
     "files": ["hardhat.config.ts"],
     "compilerOptions": {
       "noEmit": true,
@@ -10,6 +10,7 @@
       "sourceMap": true,
       "strict": true,
       "target": "es2020",
-      "outDir": "lib/esm"
+      "outDir": "lib/esm",
+      "resolveJsonModule": true
     }
 }

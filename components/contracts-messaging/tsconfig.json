@@ -1,5 +1,5 @@
 {
-    "include": ["src", "tasks", "scripts", "test", "constants"],
+    "include": ["src", "tasks", "scripts", "test", "typechain-ethers-v6"],
     "files": ["hardhat.config.ts"],
     "compilerOptions": {
       "noEmit": true,

@@ -4,13 +4,13 @@ pragma solidity ^0.8.0;
 
 import { SlotDerivation } from '@openzeppelin/contracts/utils/SlotDerivation.sol';
 
-import { MessageOrigin, MessageOriginLibrary } from './lib/MessageOrigin.sol';
+import { PackedOrigin, MessageOrigin, MessageOriginLibrary } from './lib/MessageOrigin.sol';
 
 contract MessageEmitter {
 
     using MessageOriginLibrary for MessageOrigin;
 
-    event OnMessage(uint256 packedOrigin, bytes message);
+    event OnMessage(PackedOrigin packedOrigin, bytes message);
 
     struct State {
         uint32 sequence;
@@ -41,12 +41,13 @@ contract MessageEmitter {
 
         state.sequence += 1;
 
-        (bytes32 messageId, uint256 packedOrigin) = MessageOrigin({
+        (bytes32 messageId, PackedOrigin memory packedOrigin) = MessageOrigin({
+            emitterContract: address(this),
             sequence: state.sequence,
             srcChainId: uint32(block.chainid),
             timestamp: uint32(block.timestamp),
             sender: msg.sender
-        }).hash(address(this), message);
+        }).hash(message);
 
         emit OnMessage(packedOrigin, message);
 
