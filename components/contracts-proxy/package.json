@@ -7,7 +7,7 @@
     "type": "commonjs",
     "engines": {
       "node": ">=18",
-      "pnpm": ">=8"
+      "pnpm": ">=9"
     },
     "files": [
       "contracts",
@@ -15,8 +15,7 @@
       "src"
     ],
     "scripts": {
-      "build:compile": "hardhat compile --quiet",
-      "build": "npm-run-all build:compile",
+      "build": "hardhat compile --quiet",
       "test": "hardhat test",
       "prepublishOnly": "pnpm build"
     },

@@ -7,7 +7,7 @@
   "type": "commonjs",
   "engines": {
     "node": ">=18",
-    "pnpm": ">=8"
+    "pnpm": ">=9"
   },
   "files": [
     "contracts",

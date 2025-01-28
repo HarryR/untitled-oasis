@@ -11,9 +11,6 @@ importers:
       '@openzeppelin/contracts':
         specifier: 5.x
         version: 5.2.0
-      ethers:
-        specifier: 6.x
-        version: 6.13.5
     devDependencies:
       '@nomicfoundation/hardhat-ethers':
         specifier: ^3.0.5
@@ -39,6 +36,9 @@ importers:
       contracts-messaging:
         specifier: workspace:^
         version: link:../contracts-messaging
+      ethers:
+        specifier: 6.x
+        version: 6.13.5
       hardhat:
         specifier: ^2.21.0
         version: 2.22.18(ts-node@10.9.2(@types/node@20.17.16)(typescript@5.7.3))(typescript@5.7.3)
@@ -106,9 +106,6 @@ importers:
       '@openzeppelin/contracts':
         specifier: 5.x
         version: 5.2.0
-      ethers:
-        specifier: 6.x
-        version: 6.13.5
     devDependencies:
       '@nomicfoundation/hardhat-ethers':
         specifier: ^3.0.5
@@ -131,6 +128,9 @@ importers:
       chai:
         specifier: ^4.4.1
         version: 4.5.0
+      ethers:
+        specifier: 6.x
+        version: 6.13.5
       hardhat:
         specifier: ^2.21.0
         version: 2.22.18(ts-node@10.9.2(@types/node@20.17.16)(typescript@5.7.3))(typescript@5.7.3)
