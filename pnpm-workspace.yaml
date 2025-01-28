@@ -1,3 +1,4 @@
 packages:
   - components/contracts-messaging
-  - components/contracts-bridge
+  - components/contracts-bridge-example
+  - components/contracts-proxy

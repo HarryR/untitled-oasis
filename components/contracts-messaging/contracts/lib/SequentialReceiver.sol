@@ -4,7 +4,8 @@ pragma solidity ^0.8.0;
 
 import { ValidatorSet } from '../ValidatorSet.sol';
 import { SignedMessage } from './SignedMessage.sol';
-import { MessageOrigin, MessageOriginLibrary } from './MessageOrigin.sol';
+import { MessageOriginV1 } from './MessageOriginV1.sol';
+import { DuplicateMessageError } from './Errors.sol';
 
 library SequentialReceiver {
 
@@ -15,12 +16,18 @@ library SequentialReceiver {
     function receiveOnce(
         State storage self,
         ValidatorSet validator,
-        SignedMessage memory x
+        bytes calldata data
     )
         external
-        returns (bytes32 messageId, MessageOrigin memory origin)
-    {
-        (messageId, origin) = validator.decode(x);
+        returns (
+            bytes32 messageId,
+            MessageOriginV1.Struct memory origin,
+            bytes memory message
+    ) {
+        require( self.received[messageId] == false,
+            DuplicateMessageError(messageId) );
+
+        (messageId, origin, message) = validator.decode(data);
 
         self.received[messageId] = true;
     }

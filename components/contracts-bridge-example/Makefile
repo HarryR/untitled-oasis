@@ -1,8 +1,8 @@
-.PHONY: all compile build test clean
+.PHONY: all solidity compile build test clean
 
 all: build test
 
-compile build:
+compile build solidity:
 	pnpm hardhat compile --force
 
 test:

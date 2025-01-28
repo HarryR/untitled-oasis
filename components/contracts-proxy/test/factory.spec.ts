@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { getBytes, hexlify, keccak256, parseEther, randomBytes, Transaction } from 'ethers';
+import { hexlify, parseEther, randomBytes, Transaction } from 'ethers';
 import { ethers } from 'hardhat';
 import createxPresignedTx from '../signed_serialised_transaction_gaslimit_3000000_.json';
 

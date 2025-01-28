@@ -4,7 +4,8 @@ pragma solidity ^0.8.0;
 
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 
-import { PackedOrigin, MessageOriginLibrary } from './MessageOrigin.sol';
+import { MessageOriginV1 } from './MessageOriginV1.sol';
+import { DuplicateSignatureError, NoSignaturesError, InvalidSignatureError } from './Errors.sol';
 
 struct Signature {
     bytes32 r;
@@ -13,11 +14,11 @@ struct Signature {
 
 struct SignedMessage {
     Signature[] sigs;
-    PackedOrigin packedOrigin;
+    MessageOriginV1.Packed packedOrigin;
     bytes message;
 }
 
-using MessageOriginLibrary for PackedOrigin;
+using MessageOriginV1 for MessageOriginV1.Packed;
 
 function decodeSignedMessage(SignedMessage memory x)
     pure
@@ -29,6 +30,9 @@ function decodeSignedMessage(SignedMessage memory x)
 
     addresses = new address[](nSigs);
 
+    require( addresses.length > 0,
+        NoSignaturesError(messageId) );
+
     // Recover addresses for all signers
     for( uint i = 0; i < nSigs; i++ )
     {
@@ -38,7 +42,8 @@ function decodeSignedMessage(SignedMessage memory x)
 
         ( addresses[i], err, ) = ECDSA.tryRecover(messageId, sig.r, sig.sv);
 
-        require( err == ECDSA.RecoverError.NoError );
+        require( err == ECDSA.RecoverError.NoError,
+             InvalidSignatureError(messageId, err));
     }
 
     // Ensure there are no duplicate signers
@@ -51,7 +56,8 @@ function decodeSignedMessage(SignedMessage memory x)
                 continue;
             }
 
-            require( addresses[i] != addresses[j] );
+            require( addresses[i] != addresses[j],
+                DuplicateSignatureError(messageId, addresses[i]) );
         }
     }
 }

@@ -4,17 +4,25 @@ pragma solidity ^0.8.0;
 
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 import { SlotDerivation } from '@openzeppelin/contracts/utils/SlotDerivation.sol';
+import { EnumerableSet } from '@openzeppelin/contracts/utils/structs/EnumerableSet.sol';
 
 import { Signature } from './lib/SignedMessage.sol';
 import { IAllowedSigner } from './IAllowedSigner.sol';
-import { PackedOrigin, MessageOrigin, MessageOriginLibrary } from './lib/MessageOrigin.sol';
+import { MessageOriginV1 } from './lib/MessageOriginV1.sol';
+import { InvalidSignatureError, DuplicateSignatureError, SignerNotAllowedError } from './lib/Errors.sol';
 
 contract SignatureCollector {
 
-    using MessageOriginLibrary for PackedOrigin;
+    using MessageOriginV1 for MessageOriginV1.Packed;
+    using EnumerableSet for EnumerableSet.AddressSet;
+
+    struct MessageState {
+        Signature[] sigs;
+        EnumerableSet.AddressSet signers;
+    }
 
     struct State {
-        mapping(bytes32 => Signature[]) sigs;
+        mapping(bytes32 => MessageState) messages;
     }
 
     function _getState()
@@ -29,8 +37,15 @@ contract SignatureCollector {
         }
     }
 
+    function getMessageState(bytes32 messageId)
+        private view
+        returns (MessageState storage)
+    {
+        return _getState().messages[messageId];
+    }
+
     function collect_signature(
-        PackedOrigin memory packedOrigin,
+        MessageOriginV1.Packed memory packedOrigin,
         bytes32 messageHash,
         Signature calldata sig
     )
@@ -44,9 +59,15 @@ contract SignatureCollector {
 
         ( recovered, err, ) = ECDSA.tryRecover(messageId, sig.r, sig.sv);
 
-        require( err == ECDSA.RecoverError.NoError );
+        require( err == ECDSA.RecoverError.NoError,
+            InvalidSignatureError(messageId, err) );
 
-        MessageOrigin memory origin = packedOrigin.unpack();
+        MessageState storage ms = getMessageState(messageId);
+
+        require( false == ms.signers.contains(recovered),
+            DuplicateSignatureError(messageId, recovered));
+
+        MessageOriginV1.Struct memory origin = packedOrigin.unpack();
 
         // If a reciprocal contract exists for the sender, ask it if allowed
         // This allows for optional protocol-specific gating.
@@ -56,29 +77,33 @@ contract SignatureCollector {
         // See: https://docs.zksync.io/zksync-protocol/differences/evm-instructions#address-derivation
         if( origin.sender.code.length > 0 )
         {
-            require( IAllowedSigner(origin.sender).isSignerAllowed(recovered) );
+            require( IAllowedSigner(origin.sender).isSignerAllowed(recovered),
+                SignerNotAllowedError(messageId, recovered) );
         }
 
-        State storage state = _getState();
+        ms.sigs.push(Signature(sig.r, sig.sv));
 
-        state.sigs[messageId].push(Signature(sig.r, sig.sv));
+        ms.signers.add(recovered);
     }
 
-    function signers_count(bytes32 messageId)
+    function signatures_count(bytes32 messageId)
         external view
         returns (uint)
     {
-        State storage state = _getState();
+        return getMessageState(messageId).sigs.length;
+    }
 
-        return state.sigs[messageId].length;
+    function signatures_fetch(bytes32 messageId)
+        external view
+        returns (Signature[] memory)
+    {
+        return getMessageState(messageId).sigs;
     }
 
     function signers_fetch(bytes32 messageId)
         external view
-        returns (Signature[] memory)
+        returns (address[] memory)
     {
-        State storage state = _getState();
-
-        return state.sigs[messageId];
+        return getMessageState(messageId).signers.values();
     }
 }

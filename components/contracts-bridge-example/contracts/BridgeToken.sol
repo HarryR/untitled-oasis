@@ -12,6 +12,8 @@ contract BridgeToken is ERC1363, IBridgeToken {
         ERC20("Oasis ROSE", "ROSE")
     { }
 
+    // TODO: enforce only bridge can mint & burn
+
     function bridge_mint(address recipient, uint amount)
         external
     {
