@@ -111,7 +111,7 @@ $(OBSERVER_APP_ROFL_LOCALNET).orc: $(OBSERVER_APP_ROFL_LOCALNET)
 	$(PYTHON) bin/build-rofl-orc.py --out "$@" --version $(APP_ROFL_VERSION) --name observer --runtime sapphire-localnet --elf $<
 
 observer-localnet: $(OBSERVER_APP_ROFL_LOCALNET).orc
-	$(OASIS_ORC_TOOL) show $<
+	#$(OASIS_ORC_TOOL) show $<
 
 ################################################################################
 # testnet observer
@@ -132,10 +132,10 @@ $(OBSERVER_APP_ROFL_TESTNET).sig: $(OBSERVER_APP_ROFL_TESTNET).sgxs .signing/tes
 	sgxs-sign --key .signing/testnet.pem $(OBSERVER_APP_ROFL_TESTNET).sgxs $(OBSERVER_APP_ROFL_TESTNET).sig --xfrm 7/0 --isvprodid 0 --isvsvn 0
 
 $(OBSERVER_APP_ROFL_TESTNET).orc: $(OBSERVER_APP_ROFL_TESTNET).sig
-	$(PYTHON) build-rofl-orc.py --out "$@" --version $(APP_ROFL_VERSION) --name observer --runtime sapphire-testnet --elf $(OBSERVER_APP_ROFL_TESTNET) --sgxs $(OBSERVER_APP_ROFL_TESTNET).sgxs --sig $(OBSERVER_APP_ROFL_TESTNET).sig
+	$(PYTHON) bin/build-rofl-orc.py --out "$@" --version $(APP_ROFL_VERSION) --name observer --runtime sapphire-testnet --elf $(OBSERVER_APP_ROFL_TESTNET) --sgxs $(OBSERVER_APP_ROFL_TESTNET).sgxs --sig $(OBSERVER_APP_ROFL_TESTNET).sig
 
 observer-testnet: $(OBSERVER_APP_ROFL_TESTNET).orc
-	$(OASIS_ORC_TOOL) show $<
+	#$(OASIS_ORC_TOOL) show $<
 
 ################################################################################
 # mainnet observer
@@ -156,9 +156,9 @@ $(OBSERVER_APP_ROFL_MAINNET).sig: $(OBSERVER_APP_ROFL_MAINNET).sgxs .signing/mai
 	sgxs-sign --key .signing/mainnet.pem $(OBSERVER_APP_ROFL_MAINNET).sgxs $(OBSERVER_APP_ROFL_MAINNET).sig --xfrm 7/0 --isvprodid 0 --isvsvn 0
 
 $(OBSERVER_APP_ROFL_MAINNET).orc: $(OBSERVER_APP_ROFL_MAINNET).sig
-	$(PYTHON) build-rofl-orc.py --out "$@" --version $(APP_ROFL_VERSION) --name observer --runtime sapphire-mainnet --elf $(OBSERVER_APP_ROFL_MAINNET) --sgxs $(OBSERVER_APP_ROFL_MAINNET).sgxs --sig $(OBSERVER_APP_ROFL_MAINNET).sig
+	$(PYTHON) bin/build-rofl-orc.py --out "$@" --version $(APP_ROFL_VERSION) --name observer --runtime sapphire-mainnet --elf $(OBSERVER_APP_ROFL_MAINNET) --sgxs $(OBSERVER_APP_ROFL_MAINNET).sgxs --sig $(OBSERVER_APP_ROFL_MAINNET).sig
 
 observer-mainnet: $(OBSERVER_APP_ROFL_MAINNET).orc
-	$(OASIS_ORC_TOOL) show $<
+	#$(OASIS_ORC_TOOL) show $<
 
 ################################################################################
