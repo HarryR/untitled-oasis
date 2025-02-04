@@ -5,6 +5,7 @@ use oasis_runtime_sdk::{
     modules::rofl::app::AppId
 };
 
+#[derive(Debug, Clone)]
 pub enum NetworkMode {
     Mock,
     Localnet,
@@ -30,6 +31,7 @@ pub fn network_mode() -> NetworkMode {
     }
 }
 
+#[derive(Debug)]
 pub struct ObserverConfig {
     pub appid: AppId,
     pub mode: NetworkMode,
@@ -64,5 +66,11 @@ impl ObserverConfig {
 
     pub fn new() -> Self {
         Self::from_mode(network_mode())
+    }
+}
+
+impl Default for ObserverConfig {
+    fn default() -> Self {
+        Self::new()
     }
 }

@@ -4,11 +4,11 @@ pragma solidity ^0.8.0;
 
 import { SignedMessage, decodeSignedMessage } from './lib/SignedMessage.sol';
 import { UnexpectedVersionError } from './lib/Errors.sol';
-import { MessageOriginV1 } from './lib/MessageOriginV1.sol';
+import { MessageOriginV1, MessageOriginV1Library, PackedOrigin } from './lib/MessageOriginV1.sol';
 
 library MessageDecoderV1Library {
 
-    using MessageOriginV1 for MessageOriginV1.Packed;
+    using MessageOriginV1Library for PackedOrigin;
 
     uint8 public constant VERSION = uint8(1);
 
@@ -16,7 +16,7 @@ library MessageDecoderV1Library {
         internal pure
         returns (
             bytes32 messageId,
-            MessageOriginV1.Struct memory origin,
+            MessageOriginV1 memory origin,
             bytes memory message,
             address[] memory signers
     ) {
@@ -36,7 +36,7 @@ library MessageDecoderV1Library {
         internal pure
         returns (
             bytes32 messageId,
-            MessageOriginV1.Struct memory origin,
+            MessageOriginV1 memory origin,
             bytes memory message
     ) {
         require( data.length > 64 );
@@ -44,7 +44,7 @@ library MessageDecoderV1Library {
         require( data[0] == bytes1(VERSION),
             UnexpectedVersionError(uint8(data[1]), VERSION));
 
-        MessageOriginV1.Packed memory packed = abi.decode(data[:64], (MessageOriginV1.Packed));
+        PackedOrigin memory packed = abi.decode(data[:64], (PackedOrigin));
 
         messageId = packed.hash(data[64:]);
 
@@ -60,7 +60,7 @@ contract MessageDecoderV1 {
         external pure
         returns (
             bytes32 messageId,
-            MessageOriginV1.Struct memory origin,
+            MessageOriginV1 memory origin,
             bytes memory message,
             address[] memory signers
     ) {
@@ -71,7 +71,7 @@ contract MessageDecoderV1 {
         external pure
         returns (
             bytes32 messageId,
-            MessageOriginV1.Struct memory origin,
+            MessageOriginV1 memory origin,
             bytes memory message
     ) {
         return MessageDecoderV1Library.decodeUnsigned(data);

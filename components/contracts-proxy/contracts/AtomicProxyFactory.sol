@@ -38,6 +38,8 @@ contract AtomicProxyFactory is IAtomicProxyFactory {
 
     mapping(bytes32 => mapping(address => address)) private deployedProxies;
 
+    constructor () { }
+
     function _getCreationCode(address admin)
         internal pure
         returns (bytes memory)

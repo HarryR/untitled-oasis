@@ -7,7 +7,7 @@ import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.s
 import { SlotDerivation } from '@openzeppelin/contracts/utils/SlotDerivation.sol';
 
 import { IBridgeToken } from './IBridgeToken.sol';
-import { CommonEndpoint } from './CommonEndpoint.sol';
+import { CommonEndpoint, Settings } from './CommonEndpoint.sol';
 
 contract BridgeOnRemote is CommonEndpoint {
 
@@ -67,6 +67,8 @@ contract BridgeOnRemote is CommonEndpoint {
         public
     {
         (address recipient, uint amount) = common_receiveTokensFromRemoteChain(data);
+
+        // TODO: mint instead of transfer
 
         SafeERC20.safeTransfer(internal_getState().token, recipient, amount);
     }

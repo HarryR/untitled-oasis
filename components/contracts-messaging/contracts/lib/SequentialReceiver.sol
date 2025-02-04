@@ -16,12 +16,12 @@ library SequentialReceiver {
     function receiveOnce(
         State storage self,
         ValidatorSet validator,
-        bytes calldata data
+        bytes memory data
     )
-        external
+        internal
         returns (
             bytes32 messageId,
-            MessageOriginV1.Struct memory origin,
+            MessageOriginV1 memory origin,
             bytes memory message
     ) {
         require( self.received[messageId] == false,

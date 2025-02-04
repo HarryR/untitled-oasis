@@ -2,11 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
-
 error ThresholdNotMetError(bytes32 messageId, uint count, uint threshold);
 
-error InvalidSignatureError(bytes32 messageId, ECDSA.RecoverError err);
+error InvalidSignatureError(bytes32 messageId, uint8 ecdsaRecoverError);
 
 error DuplicateSignatureError(bytes32 messageId, address signer);
 

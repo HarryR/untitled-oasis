@@ -15,7 +15,7 @@ interface IEmitter {
         external view
         returns (
             bytes32 messageId,
-            MessageOriginV1.Struct memory origin,
+            MessageOriginV1 memory origin,
             bytes memory message,
             address[] memory signers
         );

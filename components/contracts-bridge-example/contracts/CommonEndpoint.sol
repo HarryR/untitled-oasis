@@ -18,27 +18,27 @@ struct BridgeTransferMessage {
     address recipient;
 }
 
+struct Settings {
+    uint8 validAfterNBlocks;
+    uint16 validAfterNSeconds;
+    uint96 fee;
+    uint96 minimumTransfer;
+
+    IEmitter emitter;
+    address feeCollector;
+    ValidatorSet validator;
+}
+
+struct CommonState {
+    Settings settings;
+    mapping(uint32 => address) remoteEmitters;
+    SequentialReceiver.State sequentialReceiverState;
+    uint collectedFees;
+}
+
 abstract contract CommonEndpoint is Ownable, Initializable {
 
     using SequentialReceiver for SequentialReceiver.State;
-
-    struct Settings {
-        uint8 validAfterNBlocks;
-        uint16 validAfterNSeconds;
-        uint96 fee;
-        uint96 minimumTransfer;
-
-        IEmitter emitter;
-        address feeCollector;
-        ValidatorSet validator;
-    }
-
-    struct CommonState {
-        Settings settings;
-        mapping(uint32 => address) remoteEmitters;
-        SequentialReceiver.State sequentialReceiverState;
-        uint collectedFees;
-    }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor ()

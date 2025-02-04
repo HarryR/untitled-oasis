@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 import { Address } from '@openzeppelin/contracts/utils/Address.sol';
 
-import { CommonEndpoint } from './CommonEndpoint.sol';
+import { CommonEndpoint, Settings } from './CommonEndpoint.sol';
 
 contract BridgeOnSapphire is CommonEndpoint {
 

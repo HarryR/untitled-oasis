@@ -4,14 +4,14 @@ pragma solidity ^0.8.0;
 
 import { SlotDerivation } from '@openzeppelin/contracts/utils/SlotDerivation.sol';
 
-import { MessageOriginV1 } from './lib/MessageOriginV1.sol';
+import { MessageOriginV1Library, MessageOriginV1, PackedOrigin } from './lib/MessageOriginV1.sol';
 import { MessageDecoderV1 } from './MessageDecoderV1.sol';
 import { IEmitter } from './IEmitter.sol';
 
 contract MessageEmitterV1 is IEmitter {
 
-    using MessageOriginV1 for MessageOriginV1.Struct;
-    using MessageOriginV1 for MessageOriginV1.Packed;
+    using MessageOriginV1Library for MessageOriginV1;
+    using MessageOriginV1Library for PackedOrigin;
 
     event OnMessage(bytes32 messageId, bytes packedOriginAndMessage);
 
@@ -42,7 +42,7 @@ contract MessageEmitterV1 is IEmitter {
         external view
         returns (
             bytes32 messageId,
-            MessageOriginV1.Struct memory origin,
+            MessageOriginV1 memory origin,
             bytes memory message,
             address[] memory signers
     ) {
@@ -63,9 +63,9 @@ contract MessageEmitterV1 is IEmitter {
 
         bytes32 messageId;
 
-        MessageOriginV1.Packed memory packedOrigin;
+        PackedOrigin memory packedOrigin;
 
-        (messageId, packedOrigin) = MessageOriginV1.Struct({
+        (messageId, packedOrigin) = MessageOriginV1({
             // 256 bits
             emitterContract: address(this),
             validAfterNBlocks: validAfterNBlocks,

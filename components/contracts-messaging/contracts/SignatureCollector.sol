@@ -8,12 +8,13 @@ import { EnumerableSet } from '@openzeppelin/contracts/utils/structs/EnumerableS
 
 import { Signature } from './lib/SignedMessage.sol';
 import { IAllowedSigner } from './IAllowedSigner.sol';
-import { MessageOriginV1 } from './lib/MessageOriginV1.sol';
+import { MessageOriginV1, MessageOriginV1Library, PackedOrigin } from './lib/MessageOriginV1.sol';
 import { InvalidSignatureError, DuplicateSignatureError, SignerNotAllowedError } from './lib/Errors.sol';
 
 contract SignatureCollector {
 
-    using MessageOriginV1 for MessageOriginV1.Packed;
+    using MessageOriginV1Library for MessageOriginV1;
+    using MessageOriginV1Library for PackedOrigin;
     using EnumerableSet for EnumerableSet.AddressSet;
 
     struct MessageState {
@@ -45,7 +46,7 @@ contract SignatureCollector {
     }
 
     function collect_signature(
-        MessageOriginV1.Packed memory packedOrigin,
+        PackedOrigin memory packedOrigin,
         bytes32 messageHash,
         Signature calldata sig
     )
@@ -60,14 +61,14 @@ contract SignatureCollector {
         ( recovered, err, ) = ECDSA.tryRecover(messageId, sig.r, sig.sv);
 
         require( err == ECDSA.RecoverError.NoError,
-            InvalidSignatureError(messageId, err) );
+            InvalidSignatureError(messageId, uint8(err)) );
 
         MessageState storage ms = getMessageState(messageId);
 
         require( false == ms.signers.contains(recovered),
             DuplicateSignatureError(messageId, recovered));
 
-        MessageOriginV1.Struct memory origin = packedOrigin.unpack();
+        MessageOriginV1 memory origin = packedOrigin.unpack();
 
         // If a reciprocal contract exists for the sender, ask it if allowed
         // This allows for optional protocol-specific gating.

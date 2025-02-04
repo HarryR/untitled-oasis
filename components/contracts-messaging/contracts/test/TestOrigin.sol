@@ -2,20 +2,20 @@
 
 pragma solidity ^0.8.0;
 
-import { MessageOriginV1 } from '../lib/MessageOriginV1.sol';
+import { MessageOriginV1, PackedOrigin, MessageOriginV1Library } from '../lib/MessageOriginV1.sol';
 
 contract TestOrigin {
-    function testPack(MessageOriginV1.Struct memory origin)
+    function testPack(MessageOriginV1 memory origin)
         external pure
-        returns (MessageOriginV1.Packed memory packedOrigin)
+        returns (PackedOrigin memory packedOrigin)
     {
-        return MessageOriginV1.pack(origin);
+        return MessageOriginV1Library.pack(origin);
     }
 
-    function testUnpack(MessageOriginV1.Packed memory packedOrigin)
+    function testUnpack(PackedOrigin memory packedOrigin)
         external pure
-        returns (MessageOriginV1.Struct memory origin)
+        returns (MessageOriginV1 memory origin)
     {
-        return MessageOriginV1.unpack(packedOrigin);
+        return MessageOriginV1Library.unpack(packedOrigin);
     }
 }

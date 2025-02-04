@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 
-import { MessageOriginV1 } from './MessageOriginV1.sol';
+import { MessageOriginV1, PackedOrigin, MessageOriginV1Library } from './MessageOriginV1.sol';
 import { DuplicateSignatureError, NoSignaturesError, InvalidSignatureError } from './Errors.sol';
 
 struct Signature {
@@ -14,11 +14,11 @@ struct Signature {
 
 struct SignedMessage {
     Signature[] sigs;
-    MessageOriginV1.Packed packedOrigin;
+    PackedOrigin packedOrigin;
     bytes message;
 }
 
-using MessageOriginV1 for MessageOriginV1.Packed;
+using MessageOriginV1Library for PackedOrigin;
 
 function decodeSignedMessage(SignedMessage memory x)
     pure
@@ -43,7 +43,7 @@ function decodeSignedMessage(SignedMessage memory x)
         ( addresses[i], err, ) = ECDSA.tryRecover(messageId, sig.r, sig.sv);
 
         require( err == ECDSA.RecoverError.NoError,
-             InvalidSignatureError(messageId, err));
+             InvalidSignatureError(messageId, uint8(err)));
     }
 
     // Ensure there are no duplicate signers

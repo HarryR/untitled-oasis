@@ -8,7 +8,7 @@ import { EnumerableSet } from '@openzeppelin/contracts/utils/structs/EnumerableS
 
 import { decodeSignedMessage, SignedMessage } from './lib/SignedMessage.sol';
 import { MessageDecoderV1Library } from './MessageDecoderV1.sol';
-import { MessageOriginV1 } from './lib/MessageOriginV1.sol';
+import { MessageOriginV1, MessageOriginV1Library, PackedOrigin } from './lib/MessageOriginV1.sol';
 import { ThresholdNotMetError, SignerNotAllowedError } from './lib/Errors.sol';
 
 /// @notice Manages a dynamic set of validators and validates multi-signature messages against a configurable threshold
@@ -16,7 +16,7 @@ contract ValidatorSet is Ownable {
 
     using EnumerableSet for EnumerableSet.AddressSet;
 
-    using MessageOriginV1 for MessageOriginV1.Packed;
+    using MessageOriginV1Library for PackedOrigin;
 
     event OnValidatorAdded(address who);
 
@@ -129,7 +129,7 @@ contract ValidatorSet is Ownable {
         external view
         returns (
             bytes32 messageId,
-            MessageOriginV1.Struct memory origin,
+            MessageOriginV1 memory origin,
             bytes memory message
     ) {
         State storage state = _getState();
