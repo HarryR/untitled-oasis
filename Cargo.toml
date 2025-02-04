@@ -1,17 +1,15 @@
 [workspace]
 resolver = "2"
 members = [
-    "components/observer-app-rofl",
-    "components/observer-app-mock",
+    "components/observer-app",
     "components/observer-common",
     "components/observer-config",
     "components/tool-mgmt",
 ]
 
 [workspace.dependencies]
-oasis-runtime-sdk = { git = "https://github.com/oasisprotocol/oasis-sdk", tag = "runtime-sdk/v0.9.6" }
-alloy = { version = "0.9.2", features = ["network", "signer-mnemonic", "json-rpc", "providers", "sol-types", "json", "contract"] }
-sgxs-tools = "0.8"
+alloy = { version = "0.11.0", default-features = false }
+tokio = { version = "1.43.0", default-features = true, features = ["rt-multi-thread"] }
 
 [workspace.lints.clippy]
 indexing-slicing = "forbid"

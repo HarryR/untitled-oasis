@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
-use std::marker::PhantomData;
 use anyhow::Result;
 use alloy::{
     network::{Ethereum, EthereumWallet, Network, ReceiptResponse},
-    primitives::{Address, TxHash}, providers::Provider,
-    transports::Transport
+    primitives::{Address, TxHash},
+    providers::Provider
 };
 
 use observer_config::ObserverConfig;
@@ -15,18 +14,16 @@ pub struct DeployResult {
     pub address: Address
 }
 
-pub struct State<'a,P,T>
+pub struct State<'a,P>
 {
     pub upstream: &'a P,
     pub wallet: &'a EthereumWallet,
-    pub config: &'a ObserverConfig,
-    _get_rid_of_me: PhantomData<T>,
+    pub config: &'a ObserverConfig
 }
 
-impl<'a,P,T> State<'a,P,T>
+impl<'a,P> State<'a,P>
 where
-    P: Provider<T, Ethereum>,
-    T: Transport + Clone
+    P: Provider<Ethereum>,
 {
     pub fn new(
         upstream: &'a P,
@@ -36,8 +33,7 @@ where
         Self {
             upstream,
             wallet,
-            config,
-             _get_rid_of_me: PhantomData
+            config
         }
     }
 

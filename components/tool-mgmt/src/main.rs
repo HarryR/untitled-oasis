@@ -6,7 +6,7 @@ use alloy::{
     network::{Ethereum, EthereumWallet},
     primitives::Address,
     providers::{Provider, ProviderBuilder},
-    transports::{http::reqwest::Url, Transport}
+    transports::http::reqwest::Url
 };
 
 use observer_config::{NetworkMode, ObserverConfig};
@@ -66,17 +66,16 @@ struct Args {
     cmd: Commands
 }
 
-struct WriteCmd<'a,P,T> {
-    state: &'a State<'a,P,T>,
+struct WriteCmd<'a,P> {
+    state: &'a State<'a,P>,
     args: &'a WriteArgs
 }
 
-impl<'a,P,T> WriteCmd<'a,P,T>
+impl<'a,P> WriteCmd<'a,P>
 where
-    P: Provider<T, Ethereum>,
-    T: Transport + Clone,
+    P: Provider<Ethereum>
 {
-    fn new(state: &'a State<'a,P,T>, args: &'a WriteArgs) -> Self
+    fn new(state: &'a State<'a,P>, args: &'a WriteArgs) -> Self
     {
         Self { state, args }
     }
@@ -131,7 +130,6 @@ async fn main () -> Result<()> {
     });
 
     let provider = ProviderBuilder::new()
-        .with_recommended_fillers()
         .wallet(wallet.clone())
         .on_http(all_args.rpc.clone());
 
