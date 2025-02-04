@@ -36,7 +36,7 @@ describe('SignatureCollector', () => {
 
             expect(await c.signatures_count(messageId)).eq(signerCount);
 
-            await expect(c.collect_signature(packedOrigin, messageHash, signedMessage)).revertedWithCustomError(c, 'DuplicateSignatureError');
+            await expect(c.collect_signature.staticCall(packedOrigin, messageHash, signedMessage)).revertedWithCustomError(c, 'DuplicateSignatureError');
         }
     });
 
@@ -73,6 +73,6 @@ describe('SignatureCollector', () => {
         const {signedMessage: sig2} = compactedSign(signingKey2, packedOrigin, message);
 
         // Then, verify it's not allowed
-        expect(c.collect_signature(packedOrigin, messageHash, sig2)).revertedWithCustomError(c, 'SignerNotAllowedError');
+        expect(c.collect_signature.staticCall(packedOrigin, messageHash, sig2)).revertedWithCustomError(c, 'SignerNotAllowedError');
     });
 });

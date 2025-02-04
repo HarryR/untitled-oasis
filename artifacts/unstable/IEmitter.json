@@ -1,0 +1,126 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IEmitter",
+  "sourceName": "contracts/IEmitter.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "decodeSigned",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "messageId",
+          "type": "bytes32"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "emitterContract",
+              "type": "address"
+            },
+            {
+              "internalType": "uint8",
+              "name": "validAfterNBlocks",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "validAfterNSeconds",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint32",
+              "name": "blockHeight",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "a_reserved",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint8",
+              "name": "messageVersion",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint32",
+              "name": "sequence",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "srcChainId",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "timestamp",
+              "type": "uint32"
+            },
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct MessageOriginV1",
+          "name": "origin",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bytes",
+          "name": "message",
+          "type": "bytes"
+        },
+        {
+          "internalType": "address[]",
+          "name": "signers",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "message",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint8",
+          "name": "validAfterNBlocks",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint16",
+          "name": "validAfterNSeconds",
+          "type": "uint16"
+        }
+      ],
+      "name": "send",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

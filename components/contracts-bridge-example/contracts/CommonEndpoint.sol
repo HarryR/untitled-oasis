@@ -132,7 +132,7 @@ abstract contract CommonEndpoint is Ownable, Initializable {
 
         ValidatorSet validator = state.settings.validator;
 
-        MessageOriginV1.Struct memory origin;
+        MessageOriginV1 memory origin;
 
         bytes memory message;
 

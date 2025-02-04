@@ -7,7 +7,9 @@ import { OnMessageEvent } from '../typechain-ethers-v6/contracts/MessageEmitterV
 import { hashMessage, packOrigin } from './utils';
 
 describe('MessageEmitterV1', () => {
-    it('Generally works...', async () => {
+    it('Generally works...', async function () {
+        this.timeout(1000*60*2);
+
         const mdf = await ethers.getContractFactory('MessageDecoderV1');
         const mdc = await mdf.deploy();
         await mdc.waitForDeployment();
@@ -51,7 +53,8 @@ describe('MessageEmitterV1', () => {
             expect(origin.srcChainId).eq(network?.chainId);
             expect(origin.emitterContract).eq(await mec.getAddress());
             expect(origin.sender).eq(owner.address);
-            expect(origin.timestamp).eq(b?.timestamp)
+            // XXX: on Sapphire the block timestamp might be ~1s behind
+            expect(origin.timestamp).gte(b!.timestamp - 1)
 
             const packedOrigin = await packOrigin(decoded.origin)
             // on-chain messageId matches locally computed one

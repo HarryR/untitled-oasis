@@ -1,11 +1,10 @@
 ARTIFACTS_DIR=../../artifacts/unstable
 
-.PHONY: all compile build test clean copy-artifacts
+.PHONY: all compile build clean test-localnet test clean copy-artifacts
 
 all: build test copy-artifacts
 
-compile build:
-	pnpm hardhat compile --force
+BUILDINFO_OUT=$(ARTIFACTS_DIR)/contracts-messaging.build-info
 
 copy-artifacts: $(ARTIFACTS_DIR)/ValidatorSet.json \
 				$(ARTIFACTS_DIR)/MessageEmitterV1.json \
@@ -13,13 +12,22 @@ copy-artifacts: $(ARTIFACTS_DIR)/ValidatorSet.json \
 				$(ARTIFACTS_DIR)/IAllowedSigner.json \
 				$(ARTIFACTS_DIR)/IEmitter.json \
 				$(ARTIFACTS_DIR)/SignatureCollector.json
+	rm -f $(BUILDINFO_OUT).gz
+	cp artifacts/build-info/*.json $(BUILDINFO_OUT)
+	gzip -9 $(BUILDINFO_OUT)
 
 $(ARTIFACTS_DIR)/%.json: artifacts/build-info
 	mkdir -p $(ARTIFACTS_DIR)
 	cp "artifacts/contracts/$*.sol/$*.json" "$@"
 
+compile build solidity:
+	pnpm hardhat compile --force
+
 test:
 	pnpm hardhat test
 
+test-localnet:
+	pnpm hardhat test --network sapphire-localnet
+
 clean:
-	rm -rf artifacts cache typechain-generated typechain-ethers-v6
+	rm -rf artifacts cache typechain-ethers-v6

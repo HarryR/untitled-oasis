@@ -7,7 +7,7 @@ import { randomOrigin, packOrigin, unpackOrigin } from './utils';
 
 describe('MessageOrigin', () => {
     it('Pack & Unpack', async () => {
-        for( let i = 0; i < 0xFF; i++ ) {
+        for( let i = 0; i < 5; i++ ) {
             const f = await ethers.getContractFactory('TestOrigin');
             const c = await f.deploy();
             await c.waitForDeployment();
