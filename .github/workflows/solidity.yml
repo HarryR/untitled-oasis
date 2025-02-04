@@ -43,4 +43,4 @@ jobs:
         run: make solidity
 
       - name: Build & Test (sapphire-localnet)
-        run: make solidity-localnet
+        run: make solidity-test-localnet
