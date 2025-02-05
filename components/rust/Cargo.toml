@@ -1,0 +1,18 @@
+[workspace]
+resolver = "2"
+members = [
+    "observer-app",
+    "observer-common",
+    "observer-config",
+    "tool-mgmt",
+]
+
+[workspace.dependencies]
+alloy = { version = "0.11.0", default-features = false }
+tokio = { version = "1.43.0", default-features = true, features = ["rt-multi-thread"] }
+
+[workspace.lints.clippy]
+indexing-slicing = "forbid"
+unwrap_used = "forbid"
+expect_used = "forbid"
+panic = "forbid"

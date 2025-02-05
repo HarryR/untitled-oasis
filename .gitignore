@@ -1,11 +1,6 @@
 cache
 artifacts
 node_modules
-typechain-generated
 typechain-ethers-v6
-oasis_cli_*
-*.orc
 target
-mainnet.pem
-testnet.pem
-rofls
+*.pem

@@ -6,7 +6,7 @@ settings:
 
 importers:
 
-  components/contracts-bridge-example:
+  components/solidity/contracts-bridge-example:
     dependencies:
       '@openzeppelin/contracts':
         specifier: 5.x
@@ -55,7 +55,7 @@ importers:
         specifier: ^5.2.2
         version: 5.7.3
 
-  components/contracts-messaging:
+  components/solidity/contracts-messaging:
     dependencies:
       '@openzeppelin/contracts':
         specifier: 5.x
@@ -101,7 +101,7 @@ importers:
         specifier: ^5.7.3
         version: 5.7.3
 
-  components/contracts-proxy:
+  components/solidity/contracts-proxy:
     dependencies:
       '@openzeppelin/contracts':
         specifier: 5.x

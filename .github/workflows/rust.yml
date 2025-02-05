@@ -1,29 +1,24 @@
+# SPDX-License-Identifier: Apache-2.0
+
 name: Rust
 
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'components/rust/**'
+      - 'components/solidity/artifacts/**'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'components/rust/**'
+      - 'components/solidity/artifacts/**'
 
 jobs:
   build-rust:
     runs-on: ubuntu-latest
     steps:
-      - uses: gerlero/apt-install@v1
-        with:
-          packages: gcc-multilib clang protobuf-compiler cmake pkg-config libssl-dev
-
       - uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-            toolchain: nightly
-            rustflags: "-Ctarget-feature=+aes,+ssse3"
-            target: x86_64-fortanix-unknown-sgx
-
-      - name: Install sgx tools
-        run: cargo install fortanix-sgx-tools sgxs-tools
-
       - uses: actions/checkout@v4
-
-      - name: Build Observer
-        run: make observer
+      - name: Build Rust Components
+        run: make -C components/rust

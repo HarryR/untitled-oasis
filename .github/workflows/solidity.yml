@@ -1,10 +1,18 @@
+# SPDX-License-Identifier: Apache-2.0
+
 name: Solidity
 
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'components/solidity/**'
+      - 'pnpm-*.yaml'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'components/solidity/**'
+      - 'pnpm-*.yaml'
 
 jobs:
   build-solidity:
@@ -40,7 +48,7 @@ jobs:
         run: pnpm install
 
       - name: Build & Test
-        run: make solidity
+        run: make -C components/solidity
 
       - name: Build & Test (sapphire-localnet)
-        run: make solidity-test-localnet
+        run: make -C components/solidity test-localnet

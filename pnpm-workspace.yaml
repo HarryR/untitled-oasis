@@ -1,4 +1,4 @@
 packages:
-  - components/contracts-messaging
-  - components/contracts-bridge-example
-  - components/contracts-proxy
+  - components/solidity/contracts-messaging
+  - components/solidity/contracts-bridge-example
+  - components/solidity/contracts-proxy
